@@ -13,6 +13,10 @@ const btn_next = $(".btn-next");
 const btn_repeat = $(".btn-repeat");
 const btn_random = $(".btn-random");
 const progress = $(".progress");
+const duration_minutes = $(".duration-minutes");
+const duration_seconds = $(".duration-seconds");
+const current_time_minute = $(".current_time-minutes");
+const current_time_second = $(".current_time-seconds");
 
 
 let cdWidth = cd.offsetWidth;
@@ -22,41 +26,42 @@ const app = {
   currentIndex: 0,
   isPlaying: false,
   isShuffle: false,
+  songDuration: 0,
   //* List songs
   songs: [
     {
       name: "Chạy Về Khóc Với Anh",
       singer: "ERIK",
       path: "./media/music/YeuDuongKhoQuaThiChayVeKhocVoiAnh-ERIK-7128950.mp3",
-      image: "https://photo-resize-zmp3.zadn.vn/w320_r1x1_webp/cover/c/6/d/e/c6def069a1a885c41fe479358fa7c506.jpg"
+      image: "./media/music_images/YeuDuongKhoQuaThiChayVeKhocVoiAnh-ERIK-7128950.webp"
     },
     {
       name: "Ta Là Của Nhau",
       singer: "Đông Nhi - Ông Cao Thắng",
       path: "./media/music/TaLaCuaNhau-DongNhiOngCaoThang-4113753.mp3",
       image:
-        "https://media.doisongvietnam.vn/u/rootimage/editor/2020/05/26/21/21/max1590481274_0853.jpg"
+        "./media/music_images/TaLaCuaNhau-DongNhiOngCaoThang-4113753.jpg"
     },
     {
       name: "Mượn Rượu Tỏ Tình",
       singer: "Emily-BigDaddy",
       path:
         "./media/music/MuonRuouToTinh-EmilyBigDaddy-5871420.mp3",
-      image: "https://avatar-nct.nixcdn.com//blog/2019/03/09/0/c/e/9/1552122986482.jpg"
+      image: "./media/music_images/MuonRuouToTinh-EmilyBigDaddy-5871420.jpg"
     },
     {
       name: "Một Cú Lừa",
       singer: "Bích Phương",
       path: "./media/music/MotCuLua-BichPhuong-6288019.mp3",
       image:
-        "https://media.vov.vn/uploaded/9eqrbt2uv7o/2020_06_01/Picture2_YEXD.png"
+        "./media/music_images/MotCuLua-BichPhuong-6288019.png"
     },
     {
       name: "Hãy Trao Cho Anh",
       singer: "Sơn Tùng MTP",
       path: "./media/music/HayTraoChoAnh-SonTungMTPSnoopDogg-6010660.mp3",
       image:
-        "https://nld.mediacdn.vn/2019/7/2/635k-view-premiere-15620590708781264015848.jpg"
+        "./media/music_images/HayTraoChoAnh-SonTungMTPSnoopDogg-6010660.jpg"
     },
     {
       name: "Chạy Ngay Đi",
@@ -64,14 +69,14 @@ const app = {
       path:
         "./media/music/Chạy Ngay Đi - Sơn Tùng M-TP.mp3",
       image:
-        "https://i1.sndcdn.com/artworks-000347253627-q007hh-t500x500.jpg"
+        "./media/music_images/ChayNgayDi.jpg"
     },
     {
       name: "Bùa Yêu",
       singer: "Bích Phương",
       path: "./media/music/BuaYeu-BichPhuong-5472208.mp3",
       image:
-        "https://upload.wikimedia.org/wikipedia/vi/4/42/B%C3%ACa_%C4%91%C4%A9a_B%C3%B9a_y%C3%AAu_-_B%C3%ADch_Ph%C6%B0%C6%A1ng.png"
+        "./media/music_images/BuaYeu-BichPhuong-5472208.png"
     }
   ],
 
@@ -86,6 +91,10 @@ const app = {
 
   //* Load dữ liệu bài hát hiện tại
   loadCurrentSong: function () {
+    _this = this;
+    function pad(d) {
+      return (d < 10) ? '0' + d.toString() : d.toString();
+    }
     let songActive = $(`div[song_index='${this.currentIndex}']`);
     let listSongs = document.querySelectorAll(".song");
     listSongs.forEach(song => song.classList.remove("active"));
@@ -95,12 +104,21 @@ const app = {
     header.innerText = this.currentSong.name;
     cd_thumb.style.backgroundImage = `url(${this.currentSong.image})`;
     audio.src = this.currentSong.path;
+
+    //* Lấy thời gian bài hát
     audio.onloadedmetadata = function () {
-      timeDuration = audio.duration;
+      _this.songDuration = audio.duration;
       audio.ontimeupdate = function () {
         currentTime = audio.currentTime;
-        progress.value = `${Math.floor((currentTime / timeDuration) * 100)}`;
+        progress.value = `${Math.floor((currentTime / _this.songDuration) * 100)}`;
+        current_time_minute.innerText = pad(Math.floor(currentTime / 60));
+        current_time_second.innerText = pad(Math.floor(currentTime % 60));
       }
+      // From timeDuration to minute:second
+      let duration_minute = Math.floor(_this.songDuration / 60);
+      let duration_second = Math.floor(_this.songDuration % 60);
+      duration_minutes.innerText = pad(duration_minute);
+      duration_seconds.innerText = pad(duration_second);
     };
   },
 
@@ -236,8 +254,8 @@ const app = {
       }
     })
 
-  },
 
+  },
 
   start: function () {
     this.defineProperties();
@@ -245,6 +263,7 @@ const app = {
     this.handleEvent();
     this.loadCurrentSong();
   }
+
 }
 
 app.start();
