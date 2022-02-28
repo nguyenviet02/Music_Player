@@ -200,6 +200,7 @@ const app = {
           _this.currentIndex = 0;
         }
       }
+      console.log(_this.currentIndex);
       _this.loadCurrentSong();
       if (_this.isPlaying) {
         audio.play();
@@ -246,7 +247,8 @@ const app = {
       song.onclick = function () {
         listSongs.forEach(song => song.classList.remove("active"));
         this.classList.add("active");
-        _this.currentIndex = song.getAttribute("song_index");
+        _this.currentIndex = parseInt(song.getAttribute("song_index"));
+        console.log(_this.currentIndex);
         _this.loadCurrentSong();
         if (_this.isPlaying) {
           audio.play();
