@@ -76,7 +76,6 @@ header h2 {
   background-color: #333;
   background-size: cover;
   margin: auto;
-  transform-origin: center center;
   animation: rotate-cd 10s linear infinite;
   animation-play-state: paused;
 }
@@ -149,6 +148,13 @@ header h2 {
   height: 6px;
   background-color: var(--primary-color);
   cursor: pointer;
+}
+.progress .progress-bar {
+  background-color: var(--primary-color);
+  height: 100%;
+  width: 0%;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
 
 /* PLAYLIST */

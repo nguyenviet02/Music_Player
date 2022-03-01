@@ -168,6 +168,14 @@ header {
     background-color: var(--primary-color);
     cursor: pointer;
   }
+
+  .progress-bar {
+    background-color: var(--primary-color);
+    height: 100%;
+    width: 0%;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+  }
 }
 
 /* PLAYLIST */

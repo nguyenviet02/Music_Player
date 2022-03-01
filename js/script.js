@@ -13,6 +13,7 @@ const btn_next = $(".btn-next");
 const btn_repeat = $(".btn-repeat");
 const btn_random = $(".btn-random");
 const progress = $(".progress");
+const progress_bar = $(".progress-bar");
 const duration_minutes = $(".duration-minutes");
 const duration_seconds = $(".duration-seconds");
 const current_time_minute = $(".current_time-minutes");
@@ -110,7 +111,7 @@ const app = {
       _this.songDuration = audio.duration;
       audio.ontimeupdate = function () {
         currentTime = audio.currentTime;
-        progress.value = `${Math.floor((currentTime / _this.songDuration) * 100)}`;
+        progress_bar.style.width = `${Math.floor((currentTime / _this.songDuration) * 100)}%`;
         current_time_minute.innerText = pad(Math.floor(currentTime / 60));
         current_time_second.innerText = pad(Math.floor(currentTime % 60));
       }
@@ -237,8 +238,10 @@ const app = {
     }
 
     //<> Xử lí sự kiện tua bài hát
-    progress.onchange = function (e) {
-      audio.currentTime = (e.target.value / 100) * audio.duration;
+    progress.onclick = function (e) {
+      let percent = e.offsetX / this.offsetWidth;
+      console.log(percent);
+      audio.currentTime = percent * audio.duration;
     }
 
     //<> Xử lí sự kiện khi ấn vào 1 bài hát trong playlist
